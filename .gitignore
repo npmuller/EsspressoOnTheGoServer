@@ -1,3 +1,4 @@
 node_modules/
 ./tableList.txt
 ./config/config.json
+./scripts/brew_with_base_data.sql
