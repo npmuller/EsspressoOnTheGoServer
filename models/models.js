@@ -1,3 +1,7 @@
+var CoffeeType = bookshelf.Model.Extend({
+  tableName: 'coffee_type'
+});
+
 var BrewSettingType = bookshelf.Model.Extend({
   tableName: 'brew_setting_type'
 });
@@ -66,6 +70,7 @@ var UserSession = bookshelf.Model.Extend({
 });
 
 module.exports = {
+  coffee_type: CoffeeType,
   device: Device,
   device_setting: DeviceBrewSetting,
   device_user: DeviceUser,
