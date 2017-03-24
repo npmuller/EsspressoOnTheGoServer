@@ -1,0 +1,36 @@
+{
+  "name": "eotg_api",
+  "version": "1.0.0",
+  "description": "An API for the espress on on the go app.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/npmuller/EsspressoOnTheGoServer.git"
+  },
+  "keywords": [
+    "coffee",
+    "web",
+    "server",
+    "node",
+    "js"
+  ],
+  "author": "Nathan Muller",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/npmuller/EsspressoOnTheGoServer/issues"
+  },
+  "homepage": "https://github.com/npmuller/EsspressoOnTheGoServer#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "bookshelf": "^0.10.3",
+    "express": "^4.15.2",
+    "knex": "^0.12.8",
+    "lodash": "^4.17.4",
+    "mysql": "^2.13.0",
+    "when": "^3.7.8"
+  }
+}

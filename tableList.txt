@@ -1,0 +1,11 @@
+Tables I'm gonna need access to in the outside world:
+
+    brew_settings
+    device
+    device_configuration
+    device_user
+    geofence
+    location_status
+    notification_settings
+    users
+    user_session
