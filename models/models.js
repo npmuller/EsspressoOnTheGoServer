@@ -1,12 +1,14 @@
-var CoffeeType = bookshelf.Model.Extend({
-  tableName: 'coffee_type'
-});
+var bookshelf = require('../database/database.js');
 
-var BrewSettingType = bookshelf.Model.Extend({
+var BrewSettingType = bookshelf.Model.extend({
   tableName: 'brew_setting_type'
 });
 
-var Device = bookshelf.Model.Extend({
+var CoffeeType = bookshelf.Model.extend({
+  tableName: 'coffee_type'
+});
+
+var Device = bookshelf.Model.extend({
   tableName: 'device',
   deviceBrewSettings: function() {
     return this.hasMany(DeviceBrewSetting, 'device_id');
@@ -22,50 +24,50 @@ var Device = bookshelf.Model.Extend({
   }
 });
 
-var DeviceBrewSetting = bookshelf.Model.Extend({
+var DeviceBrewSetting = bookshelf.Model.extend({
   tableName: 'device_brew_setting',
   setting_type: function() {
     return this.belongsTo(BrewSettingType, 'brew_setting_type_id');
   }
 });
 
-var DeviceNotificationSetting = bookshelf.Model.Extend({
+var DeviceNotificationSetting = bookshelf.Model.extend({
   tableName: 'device_notification_setting',
   setting_type: function() {
     return this.belongsTo(NotificationType, 'notification_type_id');
   }
 });
 
-var DeviceUser = bookshelf.Model.Extend({
+var DeviceUser = bookshelf.Model.extend({
   tableName: 'device_user',
   users: function() {
     return this.belongsToMany(Users);
   }
 });
 
-var Geofence = bookshelf.Model.Extend({
+var Geofence = bookshelf.Model.extend({
   tableName: 'geofence'
 });
 
-var LocationStatus = bookshelf.Model.Extend({
+var LocationStatus = bookshelf.Model.extend({
   tableName: 'location_status'
 });
 
-var NotificationType = bookshelf.Model.Extend({
+var NotificationType = bookshelf.Model.extend({
   tableName: 'notification_type'
 });
 
-var Users = bookshelf.Model.Extend({
+var Users = bookshelf.Model.extend({
   tableName: 'users',
   devices: function() {
     return this.belongsToMany(Device);
   }
 });
 
-var UserSession = bookshelf.Model.Extend({
+var UserSession = bookshelf.Model.extend({
   tableName: 'user_session',
   user: function() {
-    return this.belongsTo(User, 'user_id');
+    return this.belongsTo(Users, 'user_id');
   }
 });
 

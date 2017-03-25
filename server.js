@@ -3,43 +3,26 @@
 var lodash = require('lodash');
 var express = require('express');
 var bodyParser = require('body-parser');
+var routes = require('./routes.js');
 
-// Set up connection
+// Get config values
 var env = process.env.NODE_ENV || "development";
-var config = require(__dirname + '/../config/config.json')[env];
-var knex = require('knex')({
-  client: 'mysql',
-  connection: {
-    host     : '127.0.0.1',
-    user     : config.username,
-    password : config.password,
-    database : config.database,
-    charset  : 'utf8'
-  }
-});
+var config = require('./config/config.json')[env];
 
-// Instantiate Bookshelf using connection
-var bookshelf = require('bookshelf')(knex);
-
-// Instantiate router
+// Instantiate app
 var app = express();
-var router = express.Router();
 
 // Set up request parsers
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-// Set up base route
-app.use('/api/eotg', router);
+// Set up routing
+app.use('/api/eotg', routes);
+// NOTE: if I want to have more than one routing file, than I have to require all of them.
 
 // Start the server
 app.listen(config.port, function() {
   console.log('EOTG API listening on port %d', config.port);
 });
 
-module.exports = {
-  app: app,
-  router: router,
-  bookshelf: bookshelf,
-  lodash: lodash
-}
+module.exports = lodash;

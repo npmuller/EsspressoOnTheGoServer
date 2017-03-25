@@ -1,1 +1,11 @@
-// TODO : do I actually need to define these?  I don't think so
+var bookshelf = require('../database/database.js');
+var models = require('./models.js');
+
+// Coffee Types
+var CoffeeTypes = bookshelf.Collection.extend({
+    model: models.coffee_type
+});
+
+module.exports = {
+    CoffeeTypes: CoffeeTypes
+};
