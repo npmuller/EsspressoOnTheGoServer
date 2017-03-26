@@ -3,7 +3,7 @@
 var lodash = require('lodash');
 var express = require('express');
 var bodyParser = require('body-parser');
-var routes = require('./routes.js');
+var routes = require('./routes/index.js');
 
 // Get config values
 var env = process.env.NODE_ENV || "development";

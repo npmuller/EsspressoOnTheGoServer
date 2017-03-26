@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var collections = require('./models/collections.js');
-var models = require('./models/models.js');
+var collections = require('../models/collections.js');
+var models = require('../models/models.js');
 
 // Log every incoming request
 router.use(function(req, res, next) {
