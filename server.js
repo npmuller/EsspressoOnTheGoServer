@@ -18,7 +18,6 @@ app.use(bodyParser.json());
 
 // Set up routing
 app.use('/api/eotg', routes);
-// NOTE: if I want to have more than one routing file, than I have to require all of them.
 
 // Start the server
 app.listen(config.port, function() {
