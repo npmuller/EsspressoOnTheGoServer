@@ -18,7 +18,7 @@ var Schema = {
     wifi_mac_address: {type: 'string', maxLength: 20, nullable: false},
     device_type_id: {type: 'integer', nullable: false},
     user_id: {type: 'integer', nullable: true},
-    firmware_version_id: {type: 'integer', nullable: false},
+    software_version_id: {type: 'integer', defaultTo: 1, nullable: false},
     last_updated_ts: {type: 'dateTime', nullable: false}
   },
   
@@ -30,10 +30,10 @@ var Schema = {
     last_updated_ts: {type: 'dateTime', nullable: false}
   },
   
-  device_firmware_history: {
+  device_software_history: {
     id: {type: 'increments', nullable: false, primary: true},
     device_id: {type: 'integer', nullable: false},
-    firmware_id: {type: 'integer', nullable: false},
+    software_id: {type: 'integer', nullable: false},
     device_updated_ts: {type: 'dateTime', nullable: false}
   },
   
@@ -54,13 +54,6 @@ var Schema = {
   device_user: {
     device_id: {type: 'integer', nullable: false},
     user_id: {type: 'integer', nullable: false},
-    last_updated_ts: {type: 'dateTime', nullable: false}
-  },
-  
-  firmware: {
-    id: {type: 'increments', nullable: false, primary: true},
-    version_number: {type: 'string', maxLength: 10, nullable: false},
-    file_path: {type: 'string', maxLength: 45, nullable: false},
     last_updated_ts: {type: 'dateTime', nullable: false}
   },
   
@@ -97,6 +90,13 @@ var Schema = {
   setting: {
     id: {type: 'increments', nullable: false, primary: true},
     dsc: {type: 'string', maxLength: 40, nullable: false},
+    last_updated_ts: {type: 'dateTime', nullable: false}
+  },
+  
+  software: {
+    id: {type: 'increments', nullable: false, primary: true},
+    version_number: {type: 'string', maxLength: 10, nullable: false},
+    file_path: {type: 'string', maxLength: 45, nullable: false},
     last_updated_ts: {type: 'dateTime', nullable: false}
   },
   
