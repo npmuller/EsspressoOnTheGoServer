@@ -35,7 +35,6 @@ var Device = bookshelf.Model.extend({
         .fetch(_.pick(options || {}, 'transacting'))
         .then(function(existing) {
           if (existing) {
-            console.log(existing);
             throw new Error('Duplicated device identifier: device with identifier ' + existing.attributes.device_identifier);
           }
         });
