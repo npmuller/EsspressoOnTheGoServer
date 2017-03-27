@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 // Model Routes
 var coffeeTypeRoutes = require('./coffeeTypes.js');
+var deviceRoutes = require('./devices.js');
 var userRoutes = require('./users.js');
 
 
@@ -21,5 +22,7 @@ router.use(function(req, res, next) {
 router.use('/coffeeTypes', coffeeTypeRoutes);
 // Users
 router.use('/users', userRoutes);
+// Devices
+router.use('/devices', deviceRoutes);
 
 module.exports = router;
