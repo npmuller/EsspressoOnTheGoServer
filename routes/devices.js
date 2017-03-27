@@ -4,37 +4,42 @@ var router = express.Router();
 var collections = require('../models/collections.js');
 var models = require('../models/models.js');
 
-// Get every user associated with a device
+// Register a device
 router.post('/registerDevice', bodyParser.urlencoded({extended: true}), function (req, res) {
     var deviceIdentifier = req.body.deviceIdentifier;
     var wifiMAC = req.body.macAddress;
-    // TODO : get real device type
-    console.debug("Registering device " + deviceIdentifier + ".");
+    console.log("Attempting to register device " + deviceIdentifier + ".");
     models.device.forge({
      device_identifier: deviceIdentifier,
      wifi_mac_address: wifiMAC,
-     device_type_id: 2
+     device_type_id: getDeviceTypeId(deviceIdentifier)
    })
     .save()
-    // TODO : how do we handle device already exists?
     .then(function (device) {
       if (!device) {
-        // TODO : better logging
         console.error("Error registering device.");
-        // user not found
         res.status(500).json({error: true, data: {message: "Error registering device."}});
       }
       else {
         // success! return:
-        //     json object containing session id, user id, and device id if
-        //     applicable.
-        console.log("Device " + device.device_identifier + " successfully registered!");
-        res.json({deviceId: device.id})
+        //     json object containing device id
+        console.log("Device " + device.attributes.device_identifier + " successfully registered!");
+        res.json({deviceId: device.attributes.id})
       }
   })
   .catch(function (err) {
+    console.error("Device registration error with exception " + err.message);
     res.status(500).json({error: true, data: {message: err.message}});
   });
 });
+
+function getDeviceTypeId(deviceIdentifier) {
+  var imei = RegExp('[A-Fa-f0-9]{14,14}');
+  if(imei.exec(deviceIdentifier)) {
+    return 2;
+  } else {
+    return 1;
+  }
+};
 
 module.exports = router;

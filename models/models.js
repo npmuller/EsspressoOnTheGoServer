@@ -1,4 +1,5 @@
 var bookshelf = require('../database/database.js');
+var _ = require('lodash');
 
 var BrewSettingType = bookshelf.Model.extend({
   tableName: 'brew_setting_type',
@@ -24,9 +25,26 @@ var Device = bookshelf.Model.extend({
   deviceUsers: function() {
     return this.hasMany(DeviceUser, 'device_id');
   },
+  initialize: function() {
+    this.on('saving', this._assertDeviceIdentifierUnique);
+  },
+  _assertDeviceIdentifierUnique: function(model, attributes, options) {
+    if (this.hasChanged('device_identifier')) {
+      return Device
+        .query('where', 'device_identifier', this.get('device_identifier'))
+        .fetch(_.pick(options || {}, 'transacting'))
+        .then(function(existing) {
+          if (existing) {
+            console.log(existing);
+            throw new Error('Duplicated device identifier: device with identifier ' + existing.attributes.device_identifier);
+          }
+        });
+    }
+  },
   hasTimestamps: true
 });
 
+// TODO NOW : ensure unique-ness of setting type id and device id
 var DeviceBrewSetting = bookshelf.Model.extend({
   tableName: 'device_brew_setting',
   setting_type: function() {
@@ -35,6 +53,7 @@ var DeviceBrewSetting = bookshelf.Model.extend({
   hasTimestamps: true
 });
 
+// TODO : ensure unique-ness of device id and setting type id
 var DeviceNotificationSetting = bookshelf.Model.extend({
   tableName: 'device_notification_setting',
   setting_type: function() {
@@ -86,6 +105,7 @@ var Software = bookshelf.Model.extend({
   hasTimestamps: true
 });
 
+// TODO : ensure unique-ness of users
 var Users = bookshelf.Model.extend({
   tableName: 'users',
   devices: function() {

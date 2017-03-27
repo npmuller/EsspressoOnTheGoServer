@@ -12,16 +12,20 @@ router.route('/').get(function (req, res) {
     res.json({error: false, data: collection.toJSON()});
   })
   .catch(function (err) {
+    console.error('Error getting coffee types! ' + err.message);
     res.status(500).json({error: true, data: {message: err.message}});
   });
 });
 
 // Get 1 coffee type
 router.route('/:id').get(function(req, res) {
-  models.coffee_type.forge({id: req.params.id})
+  var coffeeTypeId = req.params.id;
+  console.log('got request for coffee type id ' + coffeeTypeId);
+  models.coffee_type.forge({id: coffeeTypeId})
   .fetch()
   .then(function (coffeeType) {
     if (!coffeeType) {
+      console.error('Error getting coffee type ' + coffeeTypeId);
       res.status(404).json({error: true, data: {}});
     }
     else {
@@ -29,6 +33,7 @@ router.route('/:id').get(function(req, res) {
     }
   })
   .catch(function (err) {
+    console.error('Error getting coffee type ' + coffeeTypeId + ', ' + err.message);
     res.status(500).json({error: true, data: {message: err.message}});
   });
 });
