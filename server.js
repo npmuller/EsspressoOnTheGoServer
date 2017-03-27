@@ -2,7 +2,6 @@
 
 var lodash = require('lodash');
 var express = require('express');
-var bodyParser = require('body-parser');
 var routes = require('./routes/index.js');
 
 // Get config values
@@ -11,10 +10,6 @@ var config = require('./config/config.json')[env];
 
 // Instantiate app
 var app = express();
-
-// Set up request parsers
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
 
 // Set up routing
 app.use('/eotg/api', routes);
