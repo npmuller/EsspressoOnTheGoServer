@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 // Set up routing
-app.use('/api/eotg', routes);
+app.use('/eotg/api', routes);
 
 // Start the server
 app.listen(config.port, function() {
