@@ -16,6 +16,7 @@ router.post('/registerDevice', bodyParser.urlencoded({extended: true}), function
      device_type_id: 2
    })
     .save()
+    // TODO : how do we handle device already exists?
     .then(function (device) {
       if (!device) {
         // TODO : better logging
