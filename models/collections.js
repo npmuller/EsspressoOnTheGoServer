@@ -6,6 +6,12 @@ var CoffeeTypes = bookshelf.Collection.extend({
     model: models.coffee_type
 });
 
+// Device brew settings
+var DeviceBrewSettings = bookshelf.Collection.extend({
+    model: models.device_setting
+});
+
 module.exports = {
-    CoffeeTypes: CoffeeTypes
+    CoffeeTypes: CoffeeTypes,
+    DeviceBrewSettings: DeviceBrewSettings
 };
