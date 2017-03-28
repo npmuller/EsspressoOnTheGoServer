@@ -38,7 +38,8 @@ var Device = bookshelf.Model.extend({
         .fetch(_.pick(options || {}, 'transacting'))
         .then(function(existing) {
           if (existing) {
-            throw new Error('Duplicated device identifier: device with identifier ' + existing.attributes.device_identifier);
+            //throw new Error('Duplicated device identifier: device with identifier ' + existing.attributes.device_identifier);
+            console.log('Trying to register ' + existing.attributes.device_identifier + ', already exists!')
           }
         });
     }

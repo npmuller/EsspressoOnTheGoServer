@@ -29,12 +29,7 @@ router.post('/registerDevice', bodyParser.urlencoded({extended: true}), function
   })
   .catch(function (err) {
     console.info("Device registration error with exception " + err.message);
-    // TODO : this isn't really an error but I'm too tired to deal with it right now
-    if(err.message.startsWith('Duplicated device identifier')) {
-      res.json({deviceId: device.attributes.id})
-    } else {
-      res.status(500).json({error: true, data: {message: err.message}});
-    }
+    res.status(500).json({error: true, data: {message: err.message}});
   });
 });
 
