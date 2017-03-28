@@ -1,11 +1,11 @@
 var knex = require('knex')({
-    client: 'mysql',
-    connection: {
-        host     : 'localhost',
-        user     : 'nmuller',
-        password : 'test_pw',
-        database : 'brew',
-        charset  : 'utf8'
+  client: 'mysql',
+  connection: {
+    host     : 'localhost',
+    user     : 'nmuller',
+    password : 'test_pw',
+    database : 'brew',
+    charset  : 'utf8'
   }
 });
 
@@ -51,6 +51,7 @@ function createTable(tableName) {
     });
   });
 }
+
 function createTables () {
   var tables = [];
   var tableNames = _.keys(Schema);

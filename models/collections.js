@@ -3,21 +3,21 @@ var models = require('./models.js');
 
 // Brew Setting Types
 var BrewSettingTypes = bookshelf.Collection.extend({
-    model: models.brew_setting_type
+  model: models.brew_setting_type
 });
 
 // Coffee Types
 var CoffeeTypes = bookshelf.Collection.extend({
-    model: models.coffee_type
+  model: models.coffee_type
 });
 
 // Device brew settings
 var DeviceBrewSettings = bookshelf.Collection.extend({
-    model: models.device_setting
+  model: models.device_setting
 });
 
 module.exports = {
-    BrewSettingTypes: BrewSettingTypes,
-    CoffeeTypes: CoffeeTypes,
-    DeviceBrewSettings: DeviceBrewSettings
+  BrewSettingTypes: BrewSettingTypes,
+  CoffeeTypes: CoffeeTypes,
+  DeviceBrewSettings: DeviceBrewSettings
 };

@@ -5,15 +5,16 @@ var _ = require('lodash');
 var models = require('../models/models.js');
 
 // Register a device
-router.post('/registerDevice', bodyParser.urlencoded({extended: true}), function (req, res) {
+router.post('/registerDevice', bodyParser.urlencoded({extended: true}),
+  function (req, res) {
     var deviceIdentifier = req.body.deviceIdentifier;
     var wifiMAC = req.body.macAddress;
     console.log("Attempting to register device " + deviceIdentifier + ".");
     models.device.forge({
-     device_identifier: deviceIdentifier,
-     wifi_mac_address: wifiMAC,
-     device_type_id: getDeviceTypeId(deviceIdentifier)
-   })
+      device_identifier: deviceIdentifier,
+      wifi_mac_address: wifiMAC,
+      device_type_id: getDeviceTypeId(deviceIdentifier)
+  })
   .save()
   .then(function (device) {
     if (!device) {
@@ -34,28 +35,29 @@ router.post('/registerDevice', bodyParser.urlencoded({extended: true}), function
 });
 
 // Get a device's brew settings
-router.get('/getBrewSettings/:deviceId', function (req, res) {
+router.get('/getBrewSettings/:deviceId',
+  function (req, res) {
     var deviceId = req.params.deviceId;
     console.log("Getting brew settings for device " + deviceId + ".");
     models.device.forge({
-     id: deviceId
-   })
-    .fetch({withRelated: ['deviceBrewSettings']})
-    .then(function (device) {
-      if (!device) {
-        var errStr = "Error getting brew settings for device " + deviceId;
-        console.error(errStr);
-        res.status(500).json({error: true, data: {message: errStr}});
-      }
-      else {
-        // success! return:
-        //     json object containing device settings
-        var resJson = [];
-        _.forEach(device.related('deviceBrewSettings').models, function(brewSetting) {
-          resJson = _.concat(resJson, brewSetting.attributes);
-        })
-        res.status(200).json({brewSettings: resJson});
-      }
+      id: deviceId
+  })
+  .fetch({withRelated: ['deviceBrewSettings']})
+  .then(function (device) {
+    if (!device) {
+      var errStr = "Error getting brew settings for device " + deviceId;
+      console.error(errStr);
+      res.status(500).json({error: true, data: {message: errStr}});
+    }
+    else {
+      // success! return:
+      //     json object containing device settings
+      var resJson = [];
+      _.forEach(device.related('deviceBrewSettings').models, function(brewSetting) {
+        resJson = _.concat(resJson, brewSetting.attributes);
+      })
+      res.status(200).json({brewSettings: resJson});
+    }
   })
   .catch(function (err) {
     console.error("Error getting brew settings for device " + deviceId + " with exception " + err.message);
@@ -102,6 +104,10 @@ router.post('/setBrewSettings/:deviceId', bodyParser.json(), function (req, res)
 });
 
 function getDeviceTypeId(deviceIdentifier) {
+  // Device type 1 = Esspresso Machine, Device type 2 = Android device
+  // Since Espresso Machine serial number format hasn't been decided on yet,
+  // just check if the device identifier is an IMEI, which is garuanteed to be
+  // a phone/tablet.
   var imei = RegExp('[A-Fa-f0-9]{14,14}');
   if(imei.exec(deviceIdentifier)) {
     return 2;
