@@ -18,8 +18,7 @@ router.use(function(req, res, next) {
  * 
  * Route Definitions
  * 
- *******************************************************/ 
-   // TODO : slim down all responses to ONLY necessary data
+ *******************************************************/
 // Brew Settings
 router.use('/brewSettingTypes', brewSettingRoutes);
 // Coffee Types

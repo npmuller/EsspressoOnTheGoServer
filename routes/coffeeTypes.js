@@ -9,7 +9,7 @@ router.route('/').get(function (req, res) {
   collections.CoffeeTypes.forge()
   .fetch()
   .then(function (collection) {
-    res.json({error: false, data: collection.toJSON()});
+    res.json({coffeeTypes: collection.toJSON()});
   })
   .catch(function (err) {
     console.error('Error getting coffee types! ' + err.message);

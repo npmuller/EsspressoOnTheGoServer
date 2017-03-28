@@ -8,7 +8,7 @@ router.route('/').get(function (req, res) {
   collections.BrewSettingTypes.forge()
   .fetch()
   .then(function (collection) {
-    res.json({error: false, data: collection.toJSON()});
+    res.json({brewSettingTypes: collection.toJSON()});
   })
   .catch(function (err) {
     console.error('Error getting brew setting types! ' + err.message);
