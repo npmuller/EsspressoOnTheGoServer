@@ -3,6 +3,9 @@ var _ = require('lodash');
 
 var BrewSettingType = bookshelf.Model.extend({
   tableName: 'brew_setting_type',
+  deviceBrewSettings: function() {
+    return this.hasMany(DeviceBrewSetting, 'id');
+  },
   hasTimestamps: true
 });
 
@@ -43,16 +46,17 @@ var Device = bookshelf.Model.extend({
   hasTimestamps: true
 });
 
-// TODO NOW : ensure unique-ness of setting type id and device id
 var DeviceBrewSetting = bookshelf.Model.extend({
   tableName: 'device_brew_setting',
   setting_type: function() {
     return this.belongsTo(BrewSettingType, 'brew_setting_type_id');
   },
+  device: function() {
+    return this.belongsTo(Device, 'device_id');
+  },
   hasTimestamps: true
 });
 
-// TODO : ensure unique-ness of device id and setting type id
 var DeviceNotificationSetting = bookshelf.Model.extend({
   tableName: 'device_notification_setting',
   setting_type: function() {
