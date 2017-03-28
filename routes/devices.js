@@ -63,6 +63,36 @@ router.get('/getBrewSettings/:id', function (req, res) {
   });
 });
 
+// Set a device's brew settings
+router.post('/setBrewSettings/:id', bodyParser.json(), function (req, res) {
+    var deviceId = req.params.id;
+    console.log("Setting brew settings for device " + deviceId + ".");
+    models.device.forge({
+     id: deviceId
+   })
+    .fetch({withRelated: ['deviceBrewSettings']})
+    .then(function (device) {
+      if (!device) {
+        var errStr = "Error getting brew settins for device " + deviceId;
+        console.error(errStr);
+        res.status(500).json({error: true, data: {message: errStr}});
+      }
+      else {
+        // success! return:
+        //     json object containing device settings
+        var resJson = [];
+        _.forEach(device.related('deviceBrewSettings').models, function(brewSetting) {
+          resJson = _.concat(resJson, brewSetting.attributes);
+        })
+        res.status(200).json({error: false, data: resJson});
+      }
+  })
+  .catch(function (err) {
+    console.error("Error getting brew settings for device " + deviceId + " with exception " + err.message);
+    res.status(500).json({error: false, data: {message: err.message}});
+  });
+});
+
 function getDeviceTypeId(deviceIdentifier) {
   var imei = RegExp('[A-Fa-f0-9]{14,14}');
   if(imei.exec(deviceIdentifier)) {

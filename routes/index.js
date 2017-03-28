@@ -2,6 +2,7 @@
 var express = require('express');
 var router = express.Router();
 // Model Routes
+var brewSettingRoutes = require('./brewSettingTypes.js');
 var coffeeTypeRoutes = require('./coffeeTypes.js');
 var deviceRoutes = require('./devices.js');
 var userRoutes = require('./users.js');
@@ -18,6 +19,8 @@ router.use(function(req, res, next) {
  * Route Definitions
  * 
  *******************************************************/ 
+// Brew Settings
+router.use('/brewSettingTypes', brewSettingRoutes);
 // Coffee Types
 router.use('/coffeeTypes', coffeeTypeRoutes);
 // Users
