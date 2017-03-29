@@ -8,7 +8,7 @@ insert into device_type values (1, 'Espresso Machine', now(), now()), (2, 'Andro
 insert into software values (1, '0.0.1', '/software/android/0.0.1', now(), now());
  
 -- brew setting types
-insert into brew_setting_type values (1, 'Temperature', 2, now(), now()),(2, 'Pressure', 2, now(), now()),(3, 'Brew Schedule', 1, now(), now()),(4, 'Brew Length', 2, now(), now());
+insert into brew_setting_type values (1, 'Temperature', 2, now(), now()),(2, 'Pressure', 2, now(), now()),(3, 'Brew Schedule', 1, now(), now()),(4, 'Brew Length', 2, now(), now()), (5, 'Brew Time', 1, now(), now());
  
 -- test device
 insert into device values (1, '34B26F2352522DE', 'FF:AF:33:FF:EA:98:4F:8A', 2, null, 1, now(), now());
