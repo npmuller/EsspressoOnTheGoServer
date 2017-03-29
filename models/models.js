@@ -1,4 +1,4 @@
-var bookshelf = require('../database/database.js');
+var bookshelf = require('../database/database.js').bookshelf;
 var _ = require('lodash');
 
 var BrewSettingType = bookshelf.Model.extend({

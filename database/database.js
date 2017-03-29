@@ -16,4 +16,7 @@ var knex = require('knex')({
 var bookshelf = require('bookshelf')(knex);
 
 // Export connection
-module.exports = bookshelf;
+module.exports = {
+  bookshelf: bookshelf,
+  knex: knex
+};

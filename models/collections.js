@@ -1,4 +1,4 @@
-var bookshelf = require('../database/database.js');
+var bookshelf = require('../database/database.js').bookshelf;
 var models = require('./models.js');
 
 // Brew Setting Types

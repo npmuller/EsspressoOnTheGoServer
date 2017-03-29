@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var router = express.Router();
 var _ = require('lodash');
 var models = require('../models/models.js');
+var knex = require('../database/database.js').knex;
 
 // Register a device
 router.post('/registerDevice', bodyParser.urlencoded({extended: true}),
@@ -101,6 +102,50 @@ router.post('/setBrewSettings/:deviceId', bodyParser.json(), function (req, res)
   // success! return:
   //     json object containing brewSettingsUpdateTs: timestamp
   res.status(200).json({error: false, data: {brewSettingsUpdateTs: _.now()}});
+});
+
+// Get next Brew time
+router.get('/getBrewTime',
+  function (req, res) {
+    var deviceId = req.params.deviceId;
+    console.log("Getting next brew time for device " + deviceId + ".");
+    models.device.forge({
+      // TODO : hardcoded/hacky -- need to fix
+      id: 1
+  })
+  .fetch({withRelated: ['deviceBrewSettings']})
+  .then(function (device) {
+    if (!device) {
+      var errStr = "Error getting brew time for device " + deviceId;
+      console.error(errStr);
+      res.status(500).json({error: true, data: {message: errStr}});
+    }
+    else {
+      // success! return:
+      //     json object containing device settings
+      var resJson = {};
+      _.forEach(device.related('deviceBrewSettings').models, function(brewSetting) {
+        if(brewSetting.attributes.brew_setting_type_id == 5) {
+          resJson = {brewTime: brewSetting.attributes.brew_setting_value};
+        }
+      })
+      res.status(200).json(resJson);
+    }
+  })
+  .catch(function (err) {
+    console.error("Error getting brew settings for device " + deviceId + " with exception " + err.message);
+    res.status(500).json({error: true, data: {message: err.message}});
+  });
+});
+
+// Set next brew times for all devices (TODO : need to make this a per-device setting)
+router.post('/setBrewTime', function (req, res) {
+  try {
+    knex.raw('call spEotgSetBrewTime()');
+    res.status(200).json({error: false, message: 'ok'});
+  } catch(err) {
+    res.status(500).json({error: true, message: err.message});
+  }
 });
 
 function getDeviceTypeId(deviceIdentifier) {
