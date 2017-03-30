@@ -107,8 +107,7 @@ router.post('/setBrewSettings/:deviceId', bodyParser.json(), function (req, res)
 // Get next Brew time
 router.get('/getBrewTime',
   function (req, res) {
-    var deviceId = req.params.deviceId;
-    console.log("Getting next brew time for device " + deviceId + ".");
+    console.log("Getting next brew time.");
     models.device.forge({
       // TODO : hardcoded/hacky -- need to fix
       id: 1
@@ -116,7 +115,7 @@ router.get('/getBrewTime',
   .fetch({withRelated: ['deviceBrewSettings']})
   .then(function (device) {
     if (!device) {
-      var errStr = "Error getting brew time for device " + deviceId;
+      var errStr = "Error getting brew time";
       console.error(errStr);
       res.status(500).json({error: true, data: {message: errStr}});
     }
@@ -133,7 +132,7 @@ router.get('/getBrewTime',
     }
   })
   .catch(function (err) {
-    console.error("Error getting brew settings for device " + deviceId + " with exception " + err.message);
+    console.error("Error getting brew time with exception " + err.message);
     res.status(500).json({error: true, data: {message: err.message}});
   });
 });
