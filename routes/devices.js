@@ -30,13 +30,19 @@ router.post('/registerDevice', bodyParser.urlencoded({extended: true}),
     else {
       // success! return:
       //     json object containing device id
-      console.log("Device " + device.attributes.device_identifier + " successfully registered!");
+      console.info("Device " + device.attributes.device_identifier + " successfully registered!");
       res.json({deviceId: device.attributes.id})
     }
   })
   .catch(function (err) {
-    console.info("Device registration error with exception " + err.message);
-    res.status(500).json({error: true, data: {message: err.message}});
+    if(err.message.includes("deviceId")) {
+        var deviceData = err.message.split(' ');
+        var devId = deviceData[1];
+        res.status(200).json({deviceId: devId});
+    } else {
+        console.error("Device registration error with exception " + err.message);
+        res.status(500).json({error: true, data: {message: err.message}});
+    }
   });
 });
 

@@ -38,8 +38,9 @@ var Device = bookshelf.Model.extend({
         .fetch(_.pick(options || {}, 'transacting'))
         .then(function(existing) {
           if (existing) {
-            //throw new Error('Duplicated device identifier: device with identifier ' + existing.attributes.device_identifier);
-            console.log('Trying to register ' + existing.attributes.device_identifier + ', already exists!')
+            console.info('Trying to register ' + existing.attributes.device_identifier + ', already exists!');
+            // TODO : this is an inefficient and shitty way of getting the device id that already exists
+            throw new Error('deviceId ' + existing.attributes.id);
           }
         });
     }
