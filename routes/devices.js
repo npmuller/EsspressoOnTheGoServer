@@ -10,6 +10,11 @@ router.post('/registerDevice', bodyParser.urlencoded({extended: true}),
   function (req, res) {
     var deviceIdentifier = req.body.deviceIdentifier;
     var wifiMAC = req.body.macAddress;
+    if(!deviceIdentifier || !wifiMAC) {
+        console.error('No device identifier or MAC given to register!');
+        res.status(500).json({error: true, message: "Cannot register a device with blank serial number or MAC address!"});
+        return;
+    }
     console.log("Attempting to register device " + deviceIdentifier + ".");
     models.device.forge({
       device_identifier: deviceIdentifier,
