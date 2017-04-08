@@ -116,9 +116,9 @@ router.post('/setBrewSettings/:deviceId', bodyParser.json(), function (req, res)
 });
 
 // Get next Brew time
-router.get('/getBrewTime',
+router.get('/shouldBrew',
   function (req, res) {
-    console.log("Getting next brew time.");
+    console.log("Got poll request for brew enable.");
     models.device.forge({
       // TODO : hardcoded/hacky -- need to fix
       id: 1
@@ -126,7 +126,7 @@ router.get('/getBrewTime',
   .fetch({withRelated: ['deviceBrewSettings']})
   .then(function (device) {
     if (!device) {
-      var errStr = "Error getting brew time";
+      var errStr = "Error getting brew enable";
       console.error(errStr);
       res.status(500).json({error: true, data: {message: errStr}});
     }
@@ -136,22 +136,24 @@ router.get('/getBrewTime',
       var resJson = {};
       _.forEach(device.related('deviceBrewSettings').models, function(brewSetting) {
         if(brewSetting.attributes.brew_setting_type_id == 5) {
-          resJson = {brewTime: brewSetting.attributes.brew_setting_value};
+          resJson = {shouldBrew: brewSetting.attributes.brew_setting_value};
         }
       })
       res.status(200).json(resJson);
     }
   })
   .catch(function (err) {
-    console.error("Error getting brew time with exception " + err.message);
+    console.error("Error getting brew enable with exception " + err.message);
     res.status(500).json({error: true, data: {message: err.message}});
   });
 });
 
 // Set next brew times for all devices (TODO : need to make this a per-device setting)
-router.post('/setBrewTime', function (req, res) {
+// TODO : make this less obvious to the outside world
+router.post('/setBrewEnable/:brewEnable', function (req, res) {
   try {
-    knex.raw('call spEotgSetBrewTime()');
+    var brewEnable = req.params.brewEnable;
+    knex.raw('call spEotgSetBrewEnable(' + brewEnable + ');');
     res.status(200).json({error: false, message: 'ok'});
   } catch(err) {
     res.status(500).json({error: true, message: err.message});
