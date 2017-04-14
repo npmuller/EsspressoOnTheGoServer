@@ -5,8 +5,8 @@ var router = express.Router();
 var brewSettingRoutes = require('./brewSettingTypes.js');
 var coffeeTypeRoutes = require('./coffeeTypes.js');
 var deviceRoutes = require('./devices.js');
+var presetRoutes = require('./presets.js');
 var userRoutes = require('./users.js');
-
 
 // Log every incoming request
 router.use(function(req, res, next) {
@@ -23,9 +23,11 @@ router.use(function(req, res, next) {
 router.use('/brewSettingTypes', brewSettingRoutes);
 // Coffee Types
 router.use('/coffeeTypes', coffeeTypeRoutes);
-// Users
-router.use('/users', userRoutes);
 // Devices
 router.use('/devices', deviceRoutes);
+// Status Items
+router.use('/presets', presetRoutes);
+// Users
+router.use('/users', userRoutes);
 
 module.exports = router;

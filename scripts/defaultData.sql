@@ -15,3 +15,7 @@ insert into device values (1, '34B26F2352522DE', 'FF:AF:33:FF:EA:98:4F:8A', 2, n
  
 -- test brew settings
 insert into device_brew_setting values (1, 1, 3, 'M0655,W0630,Sa0800,Su0800', now(), now()), (2, 1, 1, '185', now(), now()), (3, 1, 5, '1490804235', now(), now());
+
+-- default status items 
+insert into device_status values (1, 13, 'Medium', 'Low', 0, -1, now(), now());
+

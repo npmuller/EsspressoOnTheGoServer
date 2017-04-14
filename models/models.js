@@ -1,6 +1,16 @@
 var bookshelf = require('../database/database.js').bookshelf;
 var _ = require('lodash');
 
+var BrewPreset = bookshelf.Model.extend({
+    tableName: 'brew_preset',
+    hasTimestamps: true
+});
+
+var BrewPresetSetting = bookshelf.Model.extend({
+    tableName: 'brew_preset_setting',
+    hasTimestamps: true
+});
+
 var BrewSettingType = bookshelf.Model.extend({
   tableName: 'brew_setting_type',
   deviceBrewSettings: function() {
@@ -67,6 +77,11 @@ var DeviceNotificationSetting = bookshelf.Model.extend({
   hasTimestamps: true
 });
 
+var DeviceStatus = bookshelf.Model.extend({
+    tableName: 'device_status',
+    hasTimestamps: true
+});
+
 var DeviceSoftwareHistory = bookshelf.Model.extend({
   tableName: 'device_software_history',
   hasTimestamps: true
@@ -128,11 +143,14 @@ var UserSession = bookshelf.Model.extend({
 });
 
 module.exports = {
+  brew_preset: BrewPreset,
+  brew_preset_setting: BrewPresetSetting,
   brew_setting_type: BrewSettingType,
   coffee_type: CoffeeType,
   device: Device,
   device_setting: DeviceBrewSetting,
   device_software_history: DeviceSoftwareHistory,
+  device_status: DeviceStatus,
   device_type: DeviceType,
   device_user: DeviceUser,
   geofence: Geofence,

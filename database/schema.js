@@ -1,4 +1,23 @@
 var Schema = {
+  
+  brew_preset: {
+    id: {type: 'increments', nullable: false, primary: true},
+    device_id: {type: 'integer', nullable: false},
+    dsc: {type: 'string', nullable: false},
+    enabled: {type: 'bit', nullable: false},
+    created_at: {type: 'dateTime', nullable: false},
+    updated_at: {type: 'dateTime', nullable: true}
+  },
+
+  brew_preset_setting: {
+    id: {type: 'increments', nullable: false, primary: true},
+    brew_preset_id: {type: 'integer', nullable: false},
+    preset_setting_type_id: {type: 'integer', nullable: false},
+    preset_setting_value: {type: 'string', nullable: false},
+    created_at: {type: 'dateTime', nullable: false},
+    updated_at: {type: 'dateTime', nullable: true}
+  },
+
   brew_setting_type: {
     id: {type: 'increments', nullable: false, primary: true},
     dsc: {type: 'string', maxLength: 255, nullable: false},
@@ -47,6 +66,17 @@ var Schema = {
     id: {type: 'increments', nullable: false, primary: true},
     device_id: {type: 'integer', nullable: false},
     software_id: {type: 'integer', nullable: false},
+    created_at: {type: 'dateTime', nullable: false},
+    updated_at: {type: 'dateTime', nullable: true}
+  },
+  
+  device_status: {
+    id: {type: 'increments', nullable: false, primary: true},
+    device_id: {type: 'integer', nullable: false},
+    battery_level: {type: 'string', nullable: true},
+    water_level: {type: 'string', nullable: true},
+    ac_power_state: {type: 'tinyint', nullable: true},
+    preset_id: {type: 'integer', nullable: false},
     created_at: {type: 'dateTime', nullable: false},
     updated_at: {type: 'dateTime', nullable: true}
   },

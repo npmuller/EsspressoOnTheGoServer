@@ -1,14 +1,4 @@
-var knex = require('knex')({
-  client: 'mysql',
-  connection: {
-    host     : 'localhost',
-    user     : 'nmuller',
-    password : 'test_pw',
-    database : 'brew',
-    charset  : 'utf8'
-  }
-});
-
+var knex = require('../database/database.js').knex;
 var Schema = require('../database/schema');
 var sequence = require('when/sequence');
 var _ = require('lodash');
@@ -54,7 +44,8 @@ function createTable(tableName) {
 
 function createTables () {
   var tables = [];
-  var tableNames = _.keys(Schema);
+//  var tableNames = _.keys(Schema);
+  var tableNames = ['device_status'];
   tables = _.map(tableNames, function (tableName) {
     return function () {
       return createTable(tableName);
