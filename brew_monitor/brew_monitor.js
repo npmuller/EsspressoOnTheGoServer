@@ -1,23 +1,24 @@
 var _ = require('lodash');
 var models = require('../models/models.js')
-var collections = require('../models/collections.js')
 
-var ish = true;
-while(ish) {
+var shouldRun = true;
+// TODO : make this work for more than one device
+while(shouldRun) {
     console.info('Running brew monitor.');
     // Get the brew schedule for all devices
-    var scheduleSetting = models.device_setting.forge({
-         brew_setting_type_id: 3
-    });
-    collections.DeviceBrewSettings.forge([scheduleSetting])
+    models.device_setting.forge().where({brew_setting_type_id: '3'})
     .fetch()
     .then(function(settings) {
-        _.each(settings, function(setting) {
-            console.info(setting);
+        console.log(settings);
+        var currentDateTime = 
+        var brewSchedule = settings.attributes.brew_setting_value;
+        _.each(brewSchedule.split(','), function(item) {
+            // {0-6}:{TTTT}
+            
         });
     }).catch(function(ex) {
-        console.error("Error getting brew schedules for scheduling.");
+        console.error("Error getting brew schedules for scheduling: " + ex);
     });
-    ish = false;
+    shouldRun = false;
 }
 
