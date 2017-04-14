@@ -153,8 +153,9 @@ router.get('/shouldBrew',
 router.post('/setBrewEnable/:brewEnable', function (req, res) {
   try {
     var brewEnable = req.params.brewEnable;
-    knex.raw('call spEotgSetBrewEnable(' + brewEnable + ');');
-    res.status(200).json({error: false, message: 'ok'});
+    knex.raw('call spEotgSetBrewEnable(' + brewEnable + ');').then(function() {
+        res.status(200).json({error: false, message: 'ok'});
+    });
   } catch(err) {
     res.status(500).json({error: true, message: err.message});
   }
