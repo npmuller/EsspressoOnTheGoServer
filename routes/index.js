@@ -25,7 +25,7 @@ router.use('/brewSettingTypes', brewSettingRoutes);
 router.use('/coffeeTypes', coffeeTypeRoutes);
 // Devices
 router.use('/devices', deviceRoutes);
-// Status Items
+// Presets
 router.use('/presets', presetRoutes);
 // Users
 router.use('/users', userRoutes);
