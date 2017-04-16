@@ -74,28 +74,32 @@ router.post('/setDevicePreset/:deviceId/:presetId', bodyParser.json(), function 
 router.get('/getPresets/:deviceId', function (req, res) {
     var deviceId = req.params.deviceId;
     console.log("Getting brew presets for device " + deviceId + ".");
-    models.brew_preset.forge({
-      device_id: deviceId
-    })
-    .fetch({withRelated: ['deviceBrewSettings']})
-    .then(function (brewPreset) {
-      if (!brewPreset) {
-        var errStr = "Error getting brew presets for device " + deviceId;
-        console.error(errStr);
-        res.status(500).json({error: true, data: {message: errStr}});
-      }
-      else {
-        // success! return:
-        //     json object containing device presets
-        var resJson = [];
-        _.forEach(brewPreset.related('deviceBrewSettings').models, function(brewPresetSetting) {
-          resJson = _.concat(resJson, {
-              setting_type_id: brewPresetSetting.attributes.preset_setting_type_id,
-              setting_value: brewPresetSetting.attributes.preset_setting_value
-          });
-        })
-        res.status(200).json({presetName: brewPreset.attributes.dsc, brewPresets: resJson});
-      }
+    models.brew_preset.forge()
+    .where('device_id', '=', deviceId)
+    .fetchAll({withRelated: ['deviceBrewSettings']})
+    .then(function (brewPresets) {
+        if (!brewPresets) {
+            var errStr = "Error getting brew presets for device " + deviceId;
+            console.error(errStr);
+            res.status(500).json({error: true, data: {message: errStr}});
+        }
+        else {
+            // success! return:
+            //     json object containing device presets
+            var resJson = [];
+            _.forEach(brewPresets.models, function(brewPreset) {
+                console.log(brewPreset);
+                _.forEach(brewPreset.relations.deviceBrewSettings.models, function(brewPresetSetting) {
+                    resJson = _.concat(resJson, {
+                        preset_id: brewPreset.attributes.id,
+                        preset_name: brewPreset.attributes.dsc,
+                        setting_type_id: brewPresetSetting.attributes.preset_setting_type_id,
+                        setting_value: brewPresetSetting.attributes.preset_setting_value
+                    });
+                });
+            });
+            res.status(200).json({brewPresets: resJson});
+        }
     })
     .catch(function (err) {
       console.error("Error getting brew settings for device " + deviceId + " with exception " + err.message);
@@ -105,3 +109,4 @@ router.get('/getPresets/:deviceId', function (req, res) {
 );
 
 module.exports = router;
+
