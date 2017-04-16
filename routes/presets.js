@@ -33,8 +33,7 @@ router.post('/setDevicePreset/:deviceId/:presetId', bodyParser.json(), function 
     else {
         if(newPresetSettings && newPresetSettings.length > 0) { 
             _.forEach(newPresetSettings, function(setting) {
-                console.info(setting);
-                console.info('necessary info: preset id = ' + presetId + ', preset setting type = ' + setting.id);
+                console.log('necessary info: preset id = ' + presetId + ', preset setting type = ' + setting.id);
                 models.brew_preset_setting
                 .where('brew_preset_id', '=', presetId)
                 .where('preset_setting_type_id', '=', setting.id)
@@ -72,14 +71,13 @@ router.post('/setDevicePreset/:deviceId/:presetId', bodyParser.json(), function 
 });
 
 // Get a device's presets
-router.get('/getPresets/:deviceId',
-  function (req, res) {
+router.get('/getPresets/:deviceId', function (req, res) {
     var deviceId = req.params.deviceId;
     console.log("Getting brew presets for device " + deviceId + ".");
     models.brew_preset.forge({
       device_id: deviceId
     })
-    .fetch({withRelated: ['deviceBrewPresets']})
+    .fetch({withRelated: ['deviceBrewSettings']})
     .then(function (brewPreset) {
       if (!brewPreset) {
         var errStr = "Error getting brew presets for device " + deviceId;
@@ -90,7 +88,7 @@ router.get('/getPresets/:deviceId',
         // success! return:
         //     json object containing device presets
         var resJson = [];
-        _.forEach(brewPreset.related('deviceBrewPresets').models, function(brewPresetSetting) {
+        _.forEach(brewPreset.related('deviceBrewSettings').models, function(brewPresetSetting) {
           resJson = _.concat(resJson, {
               setting_type_id: brewPresetSetting.attributes.preset_setting_type_id,
               setting_value: brewPresetSetting.attributes.preset_setting_value

@@ -3,7 +3,7 @@ var _ = require('lodash');
 
 var BrewPreset = bookshelf.Model.extend({
     tableName: 'brew_preset',
-    deviceBrewPresets: function() {
+    deviceBrewSettings: function() {
       return this.hasMany(BrewPresetSetting);
     },
     hasTimestamps: true

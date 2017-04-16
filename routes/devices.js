@@ -8,6 +8,7 @@ var knex = require('../database/database.js').knex;
 // Register a device
 router.post('/registerDevice', bodyParser.urlencoded({extended: true}),
   function (req, res) {
+    console.info(req.body.deviceIdentifier + ', ' + req.body.macAddress);
     var deviceIdentifier = req.body.deviceIdentifier;
     var wifiMAC = req.body.macAddress;
     if(!deviceIdentifier || !wifiMAC) {
@@ -28,6 +29,15 @@ router.post('/registerDevice', bodyParser.urlencoded({extended: true}),
       res.status(500).json({error: true, data: {message: "Error registering device."}});
     }
     else {
+      // Insert a status record for the device
+      models.device_status.forge({
+          device_id: device.attributes.id,
+          battery_level: '',
+          water_level: '',
+          ac_power_state: 0,
+          brew_preset_id: -1
+      })
+      .save(null, {method: 'insert'});
       // success! return:
       //     json object containing device id
       console.info("Device " + device.attributes.device_identifier + " successfully registered!");
@@ -47,34 +57,57 @@ router.post('/registerDevice', bodyParser.urlencoded({extended: true}),
 });
 
 // Get a device's brew settings
-router.get('/getBrewSettings/:deviceId',
-  function (req, res) {
+router.get('/getBrewSettings/:deviceId', bodyParser.json(), function(req, res) {
     var deviceId = req.params.deviceId;
+    var settingsModel;
     console.log("Getting brew settings for device " + deviceId + ".");
-    models.device.forge({
-      id: deviceId
-  })
-  .fetch({withRelated: ['deviceBrewSettings']})
-  .then(function (device) {
-    if (!device) {
-      var errStr = "Error getting brew settings for device " + deviceId;
-      console.error(errStr);
-      res.status(500).json({error: true, data: {message: errStr}});
-    }
-    else {
-      // success! return:
-      //     json object containing device settings
-      var resJson = [];
-      _.forEach(device.related('deviceBrewSettings').models, function(brewSetting) {
-        resJson = _.concat(resJson, brewSetting.attributes);
-      })
-      res.status(200).json({brewSettings: resJson});
-    }
-  })
-  .catch(function (err) {
-    console.error("Error getting brew settings for device " + deviceId + " with exception " + err.message);
-    res.status(500).json({error: false, data: {message: err.message}});
-  });
+    models.device_status.forge({
+        device_id: deviceId
+    })
+    .fetch()
+    .then(function(devStatus) {
+        var currentDevicePreset = devStatus.attributes.brew_preset_id;
+        console.log('current brew preset is ' + currentDevicePreset);
+        // custom preset being used
+        if(currentDevicePreset > 0) {
+            settingsModel = models.brew_preset.forge({
+                id: currentDevicePreset
+            });
+        }
+        // manual settings are in use
+        else { 
+            settingsModel = models.device.forge({
+                id: deviceId
+            });
+        }
+        settingsModel.fetch({
+            withRelated: ['deviceBrewSettings']
+        })
+        .then(function (device) {
+            if (!device) {
+                var errStr = "Error getting brew settings for device " + deviceId;
+                console.error(errStr);
+                res.status(500).json({error: true, data: {message: errStr}});
+            } else {
+                // success! return:
+                //     json object containing device settings
+                var resJson = [];
+                _.forEach(device.related('deviceBrewSettings').models, function(brewSetting) {
+                    resJson = _.concat(resJson, brewSetting.attributes);
+                });
+                res.status(200).json({brewSettings: resJson});
+            }
+        })
+        .catch(function (err) {
+            console.error("Error getting brew settings for device " + deviceId + " with exception " + err.message);
+            res.status(500).json({error: false, data: {message: err.message}});
+        });
+    })
+    .catch(function(ex) {
+        var msg = 'Error getting device status in settings request for device id ' + deviceId + ': ' + ex.message;
+        console.error(msg);
+        res.status(500).json({error: true, message: msg})
+    });
 });
 
 // Set a device's brew settings

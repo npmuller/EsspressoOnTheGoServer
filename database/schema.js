@@ -71,10 +71,10 @@ var Schema = {
   },
   
   device_status: {
-    device_id: {type: 'increments', nullable: false, primary: true},
-    battery_level: {type: 'string', nullable: true},
-    water_level: {type: 'string', nullable: true},
-    ac_power_state: {type: 'tinyint', nullable: true},
+    device_id: {type: 'integer', nullable: false, primary: true},
+    battery_level: {type: 'string', nullable: false},
+    water_level: {type: 'string', nullable: false},
+    ac_power_state: {type: 'tinyint', nullable: false},
     brew_preset_id: {type: 'integer', nullable: false},
     created_at: {type: 'dateTime', nullable: false},
     updated_at: {type: 'dateTime', nullable: true}

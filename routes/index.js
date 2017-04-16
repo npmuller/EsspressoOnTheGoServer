@@ -6,6 +6,7 @@ var brewSettingRoutes = require('./brewSettingTypes.js');
 var coffeeTypeRoutes = require('./coffeeTypes.js');
 var deviceRoutes = require('./devices.js');
 var presetRoutes = require('./presets.js');
+var statusRoutes = require('./status.js');
 var userRoutes = require('./users.js');
 
 // Log every incoming request
@@ -27,6 +28,8 @@ router.use('/coffeeTypes', coffeeTypeRoutes);
 router.use('/devices', deviceRoutes);
 // Presets
 router.use('/presets', presetRoutes);
+// Status
+router.use('/status', statusRoutes);
 // Users
 router.use('/users', userRoutes);
 
