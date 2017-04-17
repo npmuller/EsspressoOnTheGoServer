@@ -1,5 +1,6 @@
 var _ = require('lodash');
-var models = require('../models/models.js')
+var models = require('../models/models.js');
+var knex = require('../database/database.js').knex;
 
 var BREW_SCHEDULE_MONITOR_INTERVAL = 60000; 
 
@@ -15,19 +16,23 @@ async function runMonitor() {
             console.info('looping thru settings!!');
             var currentDateTime = new Date();
             var currentDayOfWeek = currentDateTime.getDay();
-            var currentHours = currentDateTime.getHours();
-            var currentMin = currentDateTime.getMinutes();
-            var currentTime = currentHours + currentMin;
-            var currentTimeStr = currentTime.toString();
-            while(currentTimeStr.length < 4) {
-                currentTimeStr = '0' + currentTimeStr;
+            var currentHours = currentDateTime.getHours().toString();
+            var currentMin = currentDateTime.getMinutes().toString();
+            if(currentHours.length < 2) {
+                currentHours = '0' + currentHours;
             }
-            var scheduleFormat = currentDayOfWeek + ':' + currentTimeStr;
+            if(currentMin.length < 2) {
+                currentMin = '0' + currentMin;
+            }
+            var currentTime = currentHours + currentMin;
+            var scheduleFormat = currentDayOfWeek + ':' + currentTime;
             if(!settings[0]) { var tmp = settings; settings = [tmp]; }
             _.forEach(settings, function(setting) {
                 var brewSchedule = setting.attributes.brew_setting_value;
                 _.each(brewSchedule.split(','), function(item) {
                     // {0-6}:{TTTT}
+                    console.info(item);
+                    console.info(scheduleFormat);
                     if(item == scheduleFormat) {
                         // Set the brew bit to true
                         knex.raw('call spEotgSetBrewEnable(1);').then(function() {
