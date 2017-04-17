@@ -1,6 +1,8 @@
 var _ = require('lodash');
 var models = require('../models/models.js')
 
+var BREW_SCHEDULE_MONITOR_INTERVAL = 60000; 
+
 // TODO : make this work for more than one device
 async function runMonitor() {
     var shouldRun = true;
@@ -11,14 +13,17 @@ async function runMonitor() {
         .fetch()
         .then(function(settings) {
             console.info('looping thru settings!!');
-            console.log(settings);    
             var currentDateTime = new Date();
             var currentDayOfWeek = currentDateTime.getDay();
             var currentHours = currentDateTime.getHours();
-            var currentMin = currentDateTime.getMinutes;
+            var currentMin = currentDateTime.getMinutes();
             var currentTime = currentHours + currentMin;
-            var scheduleFormat = currentDayOfWeek + ':' + currentTime;
-            console.log(scheduleFormat);
+            var currentTimeStr = currentTime.toString();
+            while(currentTimeStr.length < 4) {
+                currentTimeStr = '0' + currentTimeStr;
+            }
+            var scheduleFormat = currentDayOfWeek + ':' + currentTimeStr;
+            if(!settings[0]) { var tmp = settings; settings = [tmp]; }
             _.forEach(settings, function(setting) {
                 var brewSchedule = setting.attributes.brew_setting_value;
                 _.each(brewSchedule.split(','), function(item) {
@@ -32,13 +37,13 @@ async function runMonitor() {
                             console.error('Error running brew monitor when trying to set shouldBrew bit: ' + ex.message);
                         });
                     }
-               });  
+                });  
             });
         }).catch(function(ex) {
             console.error("Error getting brew schedules for scheduling: " + ex);
         });
         
-        sleep(60000);
+        await sleep(BREW_SCHEDULE_MONITOR_INTERVAL); 
     }
 }
 
