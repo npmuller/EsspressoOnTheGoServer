@@ -13,7 +13,7 @@ async function runMonitor() {
         models.device_setting.forge().where({brew_setting_type_id: '3'})
         .fetch()
         .then(function(settings) {
-            console.info('looping thru settings!!');
+            //console.log('looping thru settings!!');
             var currentDateTime = new Date();
             var currentDayOfWeek = currentDateTime.getDay();
             var currentHours = currentDateTime.getHours().toString();
@@ -27,27 +27,29 @@ async function runMonitor() {
             var currentTime = currentHours + currentMin;
             var scheduleFormat = currentDayOfWeek + ':' + currentTime;
             if(!settings[0]) { var tmp = settings; settings = [tmp]; }
+            var shouldLoop = true;
             _.forEach(settings, function(setting) {
                 var brewSchedule = setting.attributes.brew_setting_value;
                 _.each(brewSchedule.split(','), function(item) {
                     // {0-6}:{TTTT}
-                    console.info(item);
-                    console.info(scheduleFormat);
                     if(item == scheduleFormat) {
                         // Set the brew bit to true
                         knex.raw('call spEotgSetBrewEnable(1);').then(function() {
                             console.info('successfully enabled brew on schedule!');
+                            shouldLoop = false;
+                            return false;
                         })
                         .catch(function(ex) {
                             console.error('Error running brew monitor when trying to set shouldBrew bit: ' + ex.message);
                         });
                     }
-                });  
+                });
+                if(!shouldLoop) { return false; }  
             });
         }).catch(function(ex) {
             console.error("Error getting brew schedules for scheduling: " + ex);
         });
-        
+        console.info('Sleeping for ' + BREW_SCHEDULE_MONITOR_INTERVAL/1000 + ' seconds.');
         await sleep(BREW_SCHEDULE_MONITOR_INTERVAL); 
     }
 }
