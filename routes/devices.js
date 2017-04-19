@@ -186,8 +186,14 @@ router.get('/shouldBrew',
 router.post('/setBrewEnable/:brewEnable', function (req, res) {
   try {
     var brewEnable = req.params.brewEnable;
-    knex.raw('call spEotgSetBrewEnable(' + brewEnable + ');').then(function() {
-        res.status(200).json({error: false, message: 'ok'});
+    knex.raw('call spEotgSetBrewEnable(' + brewEnable + ');').then(function() {});
+    knex.raw('select brew_setting_value from device_brew_setting where brew_setting_type_id = 5 limit 1;').then(function(res) {
+        r = res[0]
+        if(((r[0].brew_setting_value)) == brewEnable) {
+            res.status(200).json({error: false, message: 'ok'});
+        } else {
+            res.status(500).json({error: true, message: 'Device must be on and plugged in before a brew can begin!'});
+        }
     });
   } catch(err) {
     res.status(500).json({error: true, message: err.message});
