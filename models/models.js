@@ -6,6 +6,11 @@ var BrewPreset = bookshelf.Model.extend({
     deviceBrewSettings: function() {
       return this.hasMany(BrewPresetSetting);
     },
+    orderBy: function (column, order) {
+        return this.query(function (qb) {
+            qb.orderBy(column, order);
+        });
+    },
     hasTimestamps: true
 });
 

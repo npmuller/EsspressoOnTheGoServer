@@ -76,6 +76,7 @@ router.get('/getPresets/:deviceId', function (req, res) {
     console.log("Getting brew presets for device " + deviceId + ".");
     models.brew_preset.forge()
     .where('device_id', '=', deviceId)
+    .orderBy('dsc', 'ASC')
     .fetchAll({withRelated: ['deviceBrewSettings']})
     .then(function (brewPresets) {
         if (!brewPresets) {
