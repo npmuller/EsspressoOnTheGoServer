@@ -183,8 +183,7 @@ router.get('/shouldBrew/:deviceId',
   });
 });
 
-// Set next brew times for all devices (TODO : need to make this a per-device setting)
-// TODO : make this less obvious to the outside world
+// Set next brew times for a device
 router.post('/setBrewEnable/:deviceId/:brewEnable', function (req, res) {
   try {
     var deviceId = req.params.deviceId;
