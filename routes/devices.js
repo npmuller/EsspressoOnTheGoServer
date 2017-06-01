@@ -185,12 +185,13 @@ router.get('/shouldBrew/:deviceId',
 
 // Set next brew times for all devices (TODO : need to make this a per-device setting)
 // TODO : make this less obvious to the outside world
-router.post('/setBrewEnable/:brewEnable', function (req, res) {
+router.post('/setBrewEnable/:deviceId/:brewEnable', function (req, res) {
   try {
+    var deviceId = req.params.deviceId;
     var brewEnable = req.params.brewEnable;
     console.info('brew enable = ' + brewEnable)
-    knex.raw('call spEotgSetBrewEnable(' + brewEnable + ');').then(function() {});
-    knex.raw('select brew_setting_value from device_brew_setting where brew_setting_type_id = 5 limit 1;').then(function(resp) {
+    knex.raw('call spEotgSetBrewEnable(' + deviceId + ', ' + brewEnable + ');').then(function() {});
+    knex.raw('select brew_setting_value from device_brew_setting where device_id = ' + deviceId + ' and brew_setting_type_id = 5 limit 1;').then(function(resp) {
         r = resp[0]
         if(((r[0].brew_setting_value)) == brewEnable) {
             res.status(200).json({error: false, message: 'ok'});

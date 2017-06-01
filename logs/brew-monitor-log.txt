@@ -127979,3 +127979,19 @@ Running brew monitor.
 Sleeping for 60 seconds.
 Running brew monitor.
 Sleeping for 60 seconds.
+Running brew monitor.
+Sleeping for 60 seconds.
+Running brew monitor.
+Sleeping for 60 seconds.
+Running brew monitor.
+Sleeping for 60 seconds.
+Running brew monitor.
+Sleeping for 60 seconds.
+Running brew monitor.
+Sleeping for 60 seconds.
+Running brew monitor.
+Sleeping for 60 seconds.
+Running brew monitor.
+Sleeping for 60 seconds.
+Running brew monitor.
+Sleeping for 60 seconds.
