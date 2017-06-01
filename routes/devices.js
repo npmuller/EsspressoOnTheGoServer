@@ -5,6 +5,8 @@ var _ = require('lodash');
 var models = require('../models/models.js');
 var knex = require('../database/database.js').knex;
 
+// TODO : Do code review of whole project, make sure everything is as efficient as it can be.
+// TODO : Standardize return json structure, get rid of "error/data" convention.
 // Register a device
 router.post('/registerDevice', bodyParser.urlencoded({extended: true}),
   function (req, res) {
@@ -148,13 +150,13 @@ router.post('/setBrewSettings/:deviceId', bodyParser.json(), function (req, res)
   res.status(200).json({error: false, data: {brewSettingsUpdateTs: _.now()}});
 });
 
-// Get next Brew time
-router.get('/shouldBrew',
+// Should my device be brewing?
+router.get('/shouldBrew/:deviceId',
   function (req, res) {
     console.log("Got poll request for brew enable.");
+    var devId = req.params.deviceId;
     models.device.forge({
-      // TODO : hardcoded/hacky -- need to fix
-      id: 1
+      id: devId
   })
   .fetch({withRelated: ['deviceBrewSettings']})
   .then(function (device) {
@@ -186,9 +188,10 @@ router.get('/shouldBrew',
 router.post('/setBrewEnable/:brewEnable', function (req, res) {
   try {
     var brewEnable = req.params.brewEnable;
+    console.info('brew enable = ' + brewEnable)
     knex.raw('call spEotgSetBrewEnable(' + brewEnable + ');').then(function() {});
-    knex.raw('select brew_setting_value from device_brew_setting where brew_setting_type_id = 5 limit 1;').then(function(res) {
-        r = res[0]
+    knex.raw('select brew_setting_value from device_brew_setting where brew_setting_type_id = 5 limit 1;').then(function(resp) {
+        r = resp[0]
         if(((r[0].brew_setting_value)) == brewEnable) {
             res.status(200).json({error: false, message: 'ok'});
         } else {

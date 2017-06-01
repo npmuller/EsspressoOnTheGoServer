@@ -1,0 +1,15 @@
+{
+  "production": {
+    "username": "root",
+    "password": "mysql is very safe",
+    "database": "brew",
+    "port": 8080 
+  },
+  
+  "development": {
+    "username": "root",
+    "password": "mysql is very safe",
+    "database": "brew",
+    "port": 8080 
+  }
+}
