@@ -57,7 +57,6 @@ var Device = bookshelf.Model.extend({
         .then(function(existing) {
           if (existing) {
             console.info('Trying to register ' + existing.attributes.device_identifier + ', already exists!');
-            // TODO : this is an inefficient and shitty way of getting the device id that already exists
             throw new Error('deviceId ' + existing.attributes.id);
           }
         });
