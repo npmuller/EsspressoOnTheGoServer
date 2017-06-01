@@ -7,6 +7,7 @@ var knex = require('../database/database.js').knex;
 
 // TODO : Do code review of whole project, make sure everything is as efficient as it can be.
 // TODO : Standardize return json structure, get rid of "error/data" convention.
+// TODO : make sure we are getting, updating, and creating things all in a consistent, efficient way.
 // Register a device
 router.post('/registerDevice', bodyParser.urlencoded({extended: true}),
   function (req, res) {
