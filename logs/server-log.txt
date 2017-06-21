@@ -117086,3 +117086,22 @@ Got poll request for brew enable.
 method: GET, url: /devices/shouldBrew/134, path: /devices/shouldBrew/134
 Got poll request for brew enable.
 Error getting brew enable
+method: GET, url: /truncate, path: /truncate
+method: GET, url: /, path: /
+method: GET, url: /devices/getBrewSettings/2, path: /devices/getBrewSettings/2
+Getting brew settings for device 2.
+Error getting device status in settings request for device id 2: Cannot read property 'attributes' of null
+method: GET, url: /coffeeTypes, path: /coffeeTypes
+method: GET, url: /coffeeTypes, path: /coffeeTypes
+method: GET, url: /coffeeTypes, path: /coffeeTypes
+method: GET, url: /devices/getBrewSettings/2, path: /devices/getBrewSettings/2
+Getting brew settings for device 2.
+Error getting device status in settings request for device id 2: Cannot read property 'attributes' of null
+[Wed Jun 21 19:42:15 UTC 2017] EOTG Web Server stoping...
+[Wed Jun 21 19:42:15 UTC 2017] EOTG Web Server starting...
+
+> eotg_api@1.0.0 start /usr/local/eotg-server/api
+> export NODE_ENV=production && node server.js
+
+EOTG API listening on port 8080
+method: GET, url: /coffeeTypes, path: /coffeeTypes

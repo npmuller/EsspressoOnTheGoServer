@@ -14,6 +14,9 @@ var app = express();
 // Set up routing
 app.use('/eotg/api', routes);
 
+// Disable the x-powered-by header for security
+app.disable('x-powered-by');
+
 // Start the server
 app.listen(config.port, function() {
   console.log('EOTG API listening on port %d', config.port);
