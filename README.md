@@ -4,6 +4,7 @@ Find all the usage documentation you need [here](http://espressotg.info/team-doc
 
 ## Configuration
 This repository does not contain a config file, so before you run the server you must create one at <EOTG_TOP_LEVEL_DIR>/config/config.json.  Your config file should consit of a wrapper json object that contains at least one JSON object called "production," like so:
+
     {
         "production": {
             "username": "<db_username>",
