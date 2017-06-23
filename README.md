@@ -16,7 +16,7 @@ This repository does not contain a config file, so before you run the server you
     }
     
  ## Upstart Job
- Since node.js does not run as a service on its own, we created an upstart job to run our server for us.  This runs the server on startup and restart, and respawns it up to 5 times a minute before it dies permanently.  For more info about writing upstart scripts, head over [here](http://upstart.ubuntu.com/getting-started.html).  Otherwise, just blantenly steal ours:
+ Since node.js does not run as a service on its own, we created an upstart job to run our server for us.  This script runs the EOTG server on startup and restart, and respawns it up to 5 times a minute before it dies permanently.  For more info about writing upstart scripts, head over [here](http://upstart.ubuntu.com/getting-started.html).  Otherwise, just blantenly steal ours:
  
     description "Espresso on the Go Web Server"
     author "Nathan Muller"
@@ -40,3 +40,6 @@ This repository does not contain a config file, so before you run the server you
     respawn limit 5 60
     
 ## nginx configuration
+Nothing super special, just make sure you forward all your requests to the right port!
+
+Have fun, hopefully you can make the hardware work.  We sure couldn't!
