@@ -4,7 +4,7 @@ var config = require('../config/config.json')[env];
 var knex = require('knex')({
   client: 'mysql',
   connection: {
-    host     : '127.0.0.1',
+    host     : config.dburl,
     user     : config.username,
     password : config.password,
     database : config.database,
