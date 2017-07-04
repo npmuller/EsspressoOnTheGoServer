@@ -6,8 +6,9 @@ var models = require('../models/models.js');
 var knex = require('../database/database.js').knex;
 
 // TODO : Do code review of whole project, make sure everything is as efficient as it can be.
-// TODO : Standardize return json structure, get rid of "error/data" convention.
+// TODO : Standardize return json structure.
 // TODO : make sure we are getting, updating, and creating things all in a consistent, efficient way.
+
 // Register a device
 router.post('/registerDevice', bodyParser.urlencoded({extended: true}),
   function (req, res) {
@@ -16,7 +17,8 @@ router.post('/registerDevice', bodyParser.urlencoded({extended: true}),
     var wifiMAC = req.body.macAddress;
     if(!deviceIdentifier || !wifiMAC) {
         console.error('No device identifier or MAC given to register!');
-        res.status(500).json({error: true, message: "Cannot register a device with blank serial number or MAC address!"});
+        res.status(500)
+        ({error: true, message: "Cannot register a device with blank serial number or MAC address!"});
         return;
     }
     console.log("Attempting to register device " + deviceIdentifier + ".");
@@ -29,7 +31,7 @@ router.post('/registerDevice', bodyParser.urlencoded({extended: true}),
   .then(function (device) {
     if (!device) {
       console.error("Error registering device.");
-      res.status(500).json({error: true, data: {message: "Error registering device."}});
+      res.status(500).json({error: true, message: "Error registering device."});
     }
     else {
       // Insert a status record for the device
@@ -54,7 +56,7 @@ router.post('/registerDevice', bodyParser.urlencoded({extended: true}),
         res.status(200).json({deviceId: devId});
     } else {
         console.error("Device registration error with exception " + err.message);
-        res.status(500).json({error: true, data: {message: err.message}});
+        res.status(500).json({error: true, message: err.message});
     }
   });
 });
@@ -90,7 +92,7 @@ router.get('/getBrewSettings/:deviceId', bodyParser.json(), function(req, res) {
             if (!device) {
                 var errStr = "Error getting brew settings for device " + deviceId;
                 console.error(errStr);
-                res.status(500).json({error: true, data: {message: errStr}});
+                res.status(500).json({error: true, message: errStr});
             } else {
                 // success! return:
                 //     json object containing device settings
@@ -103,7 +105,7 @@ router.get('/getBrewSettings/:deviceId', bodyParser.json(), function(req, res) {
         })
         .catch(function (err) {
             console.error("Error getting brew settings for device " + deviceId + " with exception " + err.message);
-            res.status(500).json({error: false, data: {message: err.message}});
+            res.status(500).json({error: true, message: err.message});
         });
     })
     .catch(function(ex) {
@@ -143,12 +145,12 @@ router.post('/setBrewSettings/:deviceId', bodyParser.json(), function (req, res)
     })
     .catch(function (err) {
       console.error("Error setting brew settings for device " + deviceId + " with exception " + err.message);
-      res.status(500).json({error: false, data: {message: err.message}});
+      res.status(500).json({error: true, message: err.message});
     })
   })
   // success! return:
   //     json object containing brewSettingsUpdateTs: timestamp
-  res.status(200).json({error: false, data: {brewSettingsUpdateTs: _.now()}});
+  res.status(200).json({brewSettingsUpdateTs: _.now()});
 });
 
 // Should my device be brewing?
@@ -164,7 +166,7 @@ router.get('/shouldBrew/:deviceId',
     if (!device) {
       var errStr = "Error getting brew enable";
       console.error(errStr);
-      res.status(500).json({error: true, data: {message: errStr}});
+      res.status(500).json({error: true, message: errStr});
     }
     else {
       // success! return:
@@ -180,7 +182,7 @@ router.get('/shouldBrew/:deviceId',
   })
   .catch(function (err) {
     console.error("Error getting brew enable with exception " + err.message);
-    res.status(500).json({error: true, data: {message: err.message}});
+    res.status(500).json({error: true, message: err.message});
   });
 });
 
@@ -194,7 +196,7 @@ router.post('/setBrewEnable/:deviceId/:brewEnable', function (req, res) {
     knex.raw('select brew_setting_value from device_brew_setting where device_id = ' + deviceId + ' and brew_setting_type_id = 5 limit 1;').then(function(resp) {
         r = resp[0]
         if(((r[0].brew_setting_value)) == brewEnable) {
-            res.status(200).json({error: false, message: 'ok'});
+            res.status(200).json({message: 'ok'});
         } else {
             res.status(500).json({error: true, message: 'Device must be on and plugged in before a brew can begin!'});
         }
